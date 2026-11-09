@@ -1,0 +1,112 @@
+[
+  {
+    "id": "WCAG-Secondary-Text-on-Light-Base",
+    "severity": "HIGH",
+    "category": "Accessibility / WCAG Contrast",
+    "description": "Secondary Text on Light Base (#687386 on #E9EDF2) fails WCAG AA for normal text (< 18pt): got 4.07:1, requires >= 4.5:1.",
+    "evidence": {
+      "foreground": "#687386",
+      "background": "#E9EDF2",
+      "ratio": 4.073,
+      "ratioFormatted": "4.07:1",
+      "passesAANormal": false,
+      "passesAALarge": true,
+      "passesAAA": false,
+      "passesUIElement": true
+    },
+    "recommendation": "If used for body/label text (<18pt / <24px regular), increase contrast or designate strictly for Large Text (>=18pt or >=14pt bold)."
+  },
+  {
+    "id": "WCAG-UI-Success-on-Light-Base",
+    "severity": "MEDIUM",
+    "category": "Accessibility / Non-Text Contrast",
+    "description": "Success on Light Base (#36A783 on #E9EDF2) fails WCAG 2.1 1.4.11 Non-text contrast: got 2.55:1, requires >= 3.0:1.",
+    "evidence": {
+      "foreground": "#36A783",
+      "background": "#E9EDF2",
+      "ratio": 2.547,
+      "ratioFormatted": "2.55:1",
+      "passesAANormal": false,
+      "passesAALarge": false,
+      "passesAAA": false,
+      "passesUIElement": false
+    },
+    "recommendation": "Darken or lighten UI control boundary/icon to achieve >= 3.0:1."
+  },
+  {
+    "id": "WCAG-White-on-Brand-Accent-(Button)",
+    "severity": "HIGH",
+    "category": "Accessibility / WCAG Contrast",
+    "description": "White on Brand Accent (Button) (#FFFFFF on #526FE5) fails WCAG AA for normal text (< 18pt): got 4.41:1, requires >= 4.5:1.",
+    "evidence": {
+      "foreground": "#FFFFFF",
+      "background": "#526FE5",
+      "ratio": 4.408,
+      "ratioFormatted": "4.41:1",
+      "passesAANormal": false,
+      "passesAALarge": true,
+      "passesAAA": false,
+      "passesUIElement": true
+    },
+    "recommendation": "If used for body/label text (<18pt / <24px regular), increase contrast or designate strictly for Large Text (>=18pt or >=14pt bold)."
+  },
+  {
+    "id": "WCAG-Rose-600-Error-Text-on-Light-Base",
+    "severity": "HIGH",
+    "category": "Accessibility / WCAG Contrast",
+    "description": "Rose-600 Error Text on Light Base (#E11D48 on #E9EDF2) fails WCAG AA for normal text (< 18pt): got 3.99:1, requires >= 4.5:1.",
+    "evidence": {
+      "foreground": "#E11D48",
+      "background": "#E9EDF2",
+      "ratio": 3.995,
+      "ratioFormatted": "3.99:1",
+      "passesAANormal": false,
+      "passesAALarge": true,
+      "passesAAA": false,
+      "passesUIElement": true
+    },
+    "recommendation": "If used for body/label text (<18pt / <24px regular), increase contrast or designate strictly for Large Text (>=18pt or >=14pt bold)."
+  },
+  {
+    "id": "WCAG-UI-Amber-500-Warning-on-Light-Base",
+    "severity": "MEDIUM",
+    "category": "Accessibility / Non-Text Contrast",
+    "description": "Amber-500 Warning on Light Base (#F59E0B on #E9EDF2) fails WCAG 2.1 1.4.11 Non-text contrast: got 1.83:1, requires >= 3.0:1.",
+    "evidence": {
+      "foreground": "#F59E0B",
+      "background": "#E9EDF2",
+      "ratio": 1.827,
+      "ratioFormatted": "1.83:1",
+      "passesAANormal": false,
+      "passesAALarge": false,
+      "passesAAA": false,
+      "passesUIElement": false
+    },
+    "recommendation": "Darken or lighten UI control boundary/icon to achieve >= 3.0:1."
+  },
+  {
+    "id": "WCAG-UI-Slate-400-Neutral-on-Light-Base",
+    "severity": "MEDIUM",
+    "category": "Accessibility / Non-Text Contrast",
+    "description": "Slate-400 Neutral on Light Base (#94A3B8 on #E9EDF2) fails WCAG 2.1 1.4.11 Non-text contrast: got 2.18:1, requires >= 3.0:1.",
+    "evidence": {
+      "foreground": "#94A3B8",
+      "background": "#E9EDF2",
+      "ratio": 2.181,
+      "ratioFormatted": "2.18:1",
+      "passesAANormal": false,
+      "passesAALarge": false,
+      "passesAAA": false,
+      "passesUIElement": false
+    },
+    "recommendation": "Darken or lighten UI control boundary/icon to achieve >= 3.0:1."
+  },
+  {
+    "id": "CARD-A11Y-INTERACTIVE",
+    "severity": "LOW",
+    "category": "Accessibility / Keyboard Navigation",
+    "description": "NeumorphicCard with interactive={true} adds cursor-pointer and hover lift, but does not provide default tabIndex={0} or role='region'/'button'.",
+    "evidence": "<div class=\"rounded-2xl relative p-6 md:p-8 bg-bg-base text-text-primary neu-rim shadow-neu-flat transition-all duration-300 hover:shadow-neu-flat-lg hover:-translate-y-1 cursor-pointer\">Interactive Card</div>",
+    "recommendation": "Consumers of interactive cards should explicitly pass tabIndex={0}, role='button', and onKeyDown handlers if the card acts as a clickable trigger."
+  }
+]
