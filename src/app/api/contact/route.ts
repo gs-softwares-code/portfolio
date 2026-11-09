@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import fs from "fs";
 import path from "path";
+import { Resend } from "resend";
 
 // --- Zod schema ---
 const ContactSchema = z.object({
@@ -148,6 +149,70 @@ export async function POST(request: NextRequest) {
       { success: false, message: "Internal server error. Please try again." },
       { status: 500 }
     );
+  }
+
+  // Send email notification via Resend if API key is provided
+  const resendApiKey = process.env.RESEND_API_KEY;
+  if (resendApiKey) {
+    try {
+      const resend = new Resend(resendApiKey);
+      const recipientEmail = process.env.CONTACT_NOTIFICATION_EMAIL || "gssoftwares.official@gmail.com";
+      const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+
+      await resend.emails.send({
+        from: `GS-Softwares Inquiries <${fromEmail}>`,
+        to: recipientEmail,
+        replyTo: data.email,
+        subject: `New Project Inquiry from ${data.fullName} (${data.businessName})`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #151A23; background-color: #F8FAFC; border-radius: 12px; border: 1px solid #E2E8F0;">
+            <div style="border-bottom: 2px solid #3B82F6; padding-bottom: 16px; margin-bottom: 24px;">
+              <h2 style="margin: 0; color: #0F172A; font-size: 22px;">New Inquiry Received</h2>
+              <p style="margin: 4px 0 0; color: #64748B; font-size: 14px;">Inquiry ID: ${submissionId}</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; width: 140px; color: #475569;">Full Name:</td>
+                <td style="padding: 8px 0; color: #0F172A;">${data.fullName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #475569;">Business Name:</td>
+                <td style="padding: 8px 0; color: #0F172A;">${data.businessName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #475569;">Email:</td>
+                <td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #2563EB;">${data.email}</a></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #475569;">Phone:</td>
+                <td style="padding: 8px 0; color: #0F172A;">${data.phone || "Not provided"}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #475569;">Industry:</td>
+                <td style="padding: 8px 0; color: #0F172A;">${data.industry}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #475569;">Requested Service:</td>
+                <td style="padding: 8px 0; color: #0F172A; font-weight: 600;">${data.service}</td>
+              </tr>
+            </table>
+
+            <div style="background-color: #FFFFFF; padding: 16px; border-radius: 8px; border: 1px solid #CBD5E1; margin-bottom: 24px;">
+              <p style="margin: 0 0 8px; font-weight: bold; color: #334155;">Project Description:</p>
+              <p style="margin: 0; white-space: pre-wrap; line-height: 1.6; color: #1E293B;">${data.description}</p>
+            </div>
+
+            <div style="font-size: 12px; color: #94A3B8; text-align: center; border-top: 1px solid #E2E8F0; padding-top: 16px;">
+              Sent via GS-Softwares Inquiries Engine &bull; IP: ${ip}
+            </div>
+          </div>
+        `,
+      });
+    } catch (emailErr) {
+      // Log failure but do not break user response since submission was saved
+      console.error("Failed to send notification email via Resend:", emailErr);
+    }
   }
 
   return NextResponse.json(
