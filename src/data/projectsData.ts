@@ -284,3 +284,7 @@ export const additionalProjects: Project[] = [
 ];
 
 export const allProjects = [...featuredProjects, ...additionalProjects];
+
+export const getProjectBySlug = (slug: string) =>
+  allProjects.find((p) => p.slug === slug);
+

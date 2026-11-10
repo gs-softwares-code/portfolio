@@ -22,31 +22,45 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GS-Softwares | AI Agent Engineering & Digital Solutions",
+  title: {
+    default: "GS-Softwares | Hybrid Digital Solutions & AI Engineering Agency",
+    template: "%s | GS-Softwares",
+  },
   description:
-    "GS-Softwares builds intelligent digital infrastructure, autonomous agent workflows, and bespoke business platforms that solve real operational bottlenecks.",
-  metadataBase: new URL("https://gs-softwares.com"),
+    "GS-Softwares engineers websites, custom applications, automation systems, and AI-powered business tools that help businesses operate smarter and grow faster. India-based, globally available.",
+  metadataBase: new URL("https://gs-softwares-official.vercel.app"),
   alternates: {
     canonical: "/",
   },
+  keywords: [
+    "digital solutions",
+    "web development",
+    "AI automation",
+    "custom software",
+    "business applications",
+    "India",
+    "GS-Softwares",
+    "agency",
+  ],
   openGraph: {
-    title: "GS-Softwares | AI Agent Engineering & Digital Solutions",
+    title: "GS-Softwares | Hybrid Digital Solutions & AI Engineering Agency",
     description:
-      "High-reliability autonomous AI agents, enterprise workflow automation, and custom business platforms.",
-    url: "https://gs-softwares.com",
+      "From high-converting websites to AI-powered business systems — we engineer technology that helps businesses operate smarter and grow faster.",
+    url: "https://gs-softwares-official.vercel.app",
     siteName: "GS-Softwares",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "GS-Softwares | AI Agent Engineering & Digital Solutions",
+    title: "GS-Softwares | Hybrid Digital Solutions & AI Engineering",
     description:
-      "We engineer intelligence. You build the future. High-reliability autonomous AI agents and custom platforms.",
+      "We engineer websites, applications, automation, and AI-powered business systems. India-based, globally available.",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: { index: true, follow: true },
   },
   icons: {
     icon: [
@@ -67,25 +81,34 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://gs-softwares.com/#organization",
+      "@id": "https://gs-softwares-official.vercel.app/#organization",
       "name": "GS-Softwares",
-      "url": "https://gs-softwares.com",
+      "url": "https://gs-softwares-official.vercel.app",
+      "email": "gssoftwares.official@gmail.com",
       "sameAs": [
         "https://github.com/gs-softwares-code",
         "https://github.com/Gulshan-Singh-gs"
       ],
       "description":
-        "AI Agent Engineering and Digital Solutions company that builds intelligent digital infrastructure, autonomous workflows, and custom business platforms.",
+        "GS-Softwares is a Hybrid Digital Solutions & AI Engineering Agency that engineers websites, custom applications, automation systems, and AI-powered business tools.",
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://gs-softwares.com/#service",
+      "@id": "https://gs-softwares-official.vercel.app/#service",
       "name": "GS-Softwares",
-      "url": "https://gs-softwares.com",
+      "url": "https://gs-softwares-official.vercel.app",
+      "areaServed": ["India", "United States", "United Kingdom", "Australia"],
+      "serviceType": [
+        "Web Development",
+        "Application Development",
+        "AI Automation",
+        "Business Software",
+        "Digital Analytics",
+        "Technical SEO",
+      ],
       "parentOrganization": {
-        "@id": "https://gs-softwares.com/#organization"
+        "@id": "https://gs-softwares-official.vercel.app/#organization",
       },
-      "priceRange": "$$$$"
     },
   ],
 };

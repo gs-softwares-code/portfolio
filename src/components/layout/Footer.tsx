@@ -46,21 +46,23 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Solutions", href: "#solutions" },
-  { label: "Our Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Solutions", href: "/solutions" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms", href: "/terms-and-conditions" },
 ];
 
 const serviceLinks = [
-  { label: "AI Agent Development", href: "#services" },
-  { label: "Business Automation", href: "#services" },
-  { label: "Custom Platforms", href: "#services" },
-  { label: "Website Engineering", href: "#services" },
-  { label: "Application Development", href: "#services" },
-  { label: "Digital Infrastructure", href: "#services" },
+  { label: "Digital Presence", href: "/services/digital-presence" },
+  { label: "Applications", href: "/services/applications" },
+  { label: "AI & Automation", href: "/services/ai-automation" },
+  { label: "Analytics", href: "/services/analytics" },
+  { label: "Digital Growth", href: "/services/digital-growth" },
+  { label: "Infrastructure", href: "/services/infrastructure" },
 ];
 
 export function Footer() {
