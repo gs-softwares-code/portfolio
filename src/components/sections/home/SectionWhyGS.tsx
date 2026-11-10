@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion, Variants } from "framer-motion";
 import { CheckCircle2, Cpu, Layers, GitBranch, Shield, Zap, RefreshCw, Users } from "lucide-react";
 
 const differentiators = [
@@ -41,11 +42,38 @@ const differentiators = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 export const SectionWhyGS: React.FC = () => {
   return (
-    <section id="why-gs" className="py-20 md:py-28 bg-bg-base relative">
+    <section id="why-gs" className="py-20 md:py-28 bg-bg-base relative overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full shadow-neu-pressed-sm bg-bg-base text-brand-accent font-mono text-xs font-semibold uppercase tracking-widest mb-4">
             <span>Why GS-Softwares</span>
           </div>
@@ -55,19 +83,27 @@ export const SectionWhyGS: React.FC = () => {
           <p className="font-body text-base sm:text-lg text-text-secondary leading-relaxed">
             We don&apos;t just build websites and walk away. We engineer the reliable digital infrastructure behind sustainable business growth.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {differentiators.map((d, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`rounded-3xl bg-bg-base shadow-neu-flat p-8 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 ${
+              variants={itemVariants}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className={`rounded-3xl bg-bg-base shadow-neu-flat p-8 flex flex-col justify-between group ${
                 index === differentiators.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
               }`}
             >
               <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 rounded-2xl shadow-neu-flat-sm bg-bg-base">
+                  <div className="p-3 rounded-2xl shadow-neu-flat-sm bg-bg-base group-hover:scale-110 transition-transform duration-300">
                     {d.icon}
                   </div>
                   <h3 className="font-heading text-xl font-bold text-text-primary">
@@ -78,15 +114,14 @@ export const SectionWhyGS: React.FC = () => {
                   {d.description}
                 </p>
               </div>
-              <div className="mt-6 flex items-center text-xs font-mono text-brand-success gap-1.5">
+              <div className="mt-6 flex items-center text-xs font-mono text-brand-success gap-1.5 pt-4 border-t border-black/5">
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 <span>Verified Architecture Standard</span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
-

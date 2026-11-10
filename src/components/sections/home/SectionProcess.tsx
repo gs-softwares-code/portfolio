@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion, Variants } from "framer-motion";
 import { Search, Compass, Cpu, Code2, Rocket } from "lucide-react";
 
 const stages = [
@@ -41,11 +42,38 @@ const stages = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 export const SectionProcess: React.FC = () => {
   return (
-    <section id="process" className="py-20 md:py-28 bg-bg-base relative">
+    <section id="process" className="py-20 md:py-28 bg-bg-base relative overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full shadow-neu-pressed-sm bg-bg-base text-brand-accent font-mono text-xs font-semibold uppercase tracking-widest mb-4">
             <span>Engineering Process</span>
           </div>
@@ -55,20 +83,28 @@ export const SectionProcess: React.FC = () => {
           <p className="font-body text-base sm:text-lg text-text-secondary leading-relaxed">
             Our engineering methodology prioritizes architectural clarity and direct collaboration, ensuring delivered systems perform under real production loads.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-5 gap-6"
+        >
           {stages.map((stage) => (
-            <div
+            <motion.div
               key={stage.step}
-              className="rounded-3xl bg-bg-base shadow-neu-flat p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 relative"
+              variants={itemVariants}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="rounded-3xl bg-bg-base shadow-neu-flat p-6 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <span className="font-mono text-xl font-bold text-brand-accent">
                     {stage.step}
                   </span>
-                  <div className="p-2.5 rounded-xl shadow-neu-flat-sm bg-bg-base">
+                  <div className="p-2.5 rounded-xl shadow-neu-flat-sm bg-bg-base group-hover:scale-110 transition-transform duration-300">
                     {stage.icon}
                   </div>
                 </div>
@@ -82,11 +118,10 @@ export const SectionProcess: React.FC = () => {
                   {stage.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
-
