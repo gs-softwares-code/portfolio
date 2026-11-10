@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 type FormState = "idle" | "submitting" | "success" | "error";
@@ -12,6 +13,7 @@ interface FormErrors {
   industry?: string;
   services?: string;
   description?: string;
+  terms?: string;
 }
 
 const industryOptions = [
@@ -65,6 +67,7 @@ export const SectionContact: React.FC = () => {
   const [budgetRange, setBudgetRange] = useState("₹25,000 – ₹1,00,000");
   const [preferredContact, setPreferredContact] = useState("email");
   const [description, setDescription] = useState("");
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [website, setWebsite] = useState(""); // honeypot
 
   const toggleService = (id: string) => {
@@ -82,6 +85,7 @@ export const SectionContact: React.FC = () => {
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Valid email is required.";
     if (selectedServices.length === 0) newErrors.services = "Select at least one service.";
     if (!description.trim() || description.length < 10) newErrors.description = "Please provide more details (min 10 chars).";
+    if (!agreedToTerms) newErrors.terms = "You must agree to the Terms & Conditions and Privacy Policy to submit.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -356,6 +360,39 @@ export const SectionContact: React.FC = () => {
                 className="w-full px-4 py-3 rounded-xl bg-bg-base shadow-neu-pressed text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-accent transition-all"
               />
               {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+            </div>
+
+            {/* Terms and Privacy Policy Consent */}
+            <div>
+              <label className="flex items-start gap-3 text-xs font-body text-text-secondary cursor-pointer p-3 rounded-xl bg-bg-base shadow-neu-pressed-sm border border-black/5">
+                <input
+                  type="checkbox"
+                  required
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                  className="mt-0.5 rounded text-brand-accent focus:ring-brand-accent h-4 w-4"
+                />
+                <span className="leading-relaxed">
+                  I agree to the{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    target="_blank"
+                    className="text-brand-accent font-semibold hover:underline"
+                  >
+                    Terms &amp; Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy-policy"
+                    target="_blank"
+                    className="text-brand-accent font-semibold hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </span>
+              </label>
+              {errors.terms && <p className="text-red-500 text-xs mt-1">{errors.terms}</p>}
             </div>
 
             <div className="pt-2">
