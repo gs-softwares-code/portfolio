@@ -101,8 +101,8 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1 lg:gap-2">
-            <a
-              href="#hero"
+            <Link
+              href="/#hero"
               className={cn(
                 "px-3 py-1.5 text-xs sm:text-sm font-body font-medium rounded-full transition-all duration-200",
                 isHomePage && activeSection === "hero"
@@ -111,7 +111,7 @@ export const Navbar: React.FC = () => {
               )}
             >
               Home
-            </a>
+            </Link>
 
             {/* Services Dropdown */}
             <div
