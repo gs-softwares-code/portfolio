@@ -77,3 +77,4 @@ CREATE TABLE IF NOT EXISTS projects (
 -- Enable RLS and public read
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public read access on projects" ON projects FOR SELECT USING (true);
+

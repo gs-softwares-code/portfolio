@@ -151,3 +151,4 @@ export async function getProjectBySlug(slug: string): Promise<Project | undefine
     return defaultProjects.find((p) => p.slug === slug);
   }
 }
+
