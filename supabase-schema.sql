@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS projects (
   "keyFeatures" JSONB NOT NULL DEFAULT '[]'::jsonb,
   "githubUrl" TEXT NOT NULL,
   "liveUrl" TEXT,
+  "imageUrl" TEXT,
   featured BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

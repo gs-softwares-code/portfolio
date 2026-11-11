@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { allProjects, getProjectBySlug } from "@/data/projectsData";
+import { formatDriveImageUrl } from "@/lib/imageUtils";
 import { notFound } from "next/navigation";
 import { ExternalLink, CheckCircle2, ArrowLeft } from "lucide-react";
 
@@ -50,7 +51,18 @@ export default async function ProjectDetailPage({
             <span>Back to All Projects</span>
           </Link>
 
-          <div className="rounded-3xl bg-bg-base shadow-neu-flat p-8 md:p-12 mb-12">
+          <div className="rounded-3xl bg-bg-base shadow-neu-flat p-8 md:p-12 mb-12 overflow-hidden">
+            {formatDriveImageUrl(project.imageUrl) && (
+              <div className="mb-8 rounded-2xl overflow-hidden shadow-neu-pressed-sm border border-black/5 bg-[#E2E8F0] aspect-video relative max-h-[420px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={formatDriveImageUrl(project.imageUrl)!}
+                  alt={project.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-4">
               <span className="font-mono text-xs font-semibold text-text-muted">
                 {project.industry}

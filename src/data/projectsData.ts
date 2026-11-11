@@ -15,6 +15,7 @@ export interface Project {
   keyFeatures: string[];
   githubUrl: string;
   liveUrl?: string;
+  imageUrl?: string;
   featured: boolean;
 }
 

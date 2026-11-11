@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ExternalLink, CheckCircle2 } from "lucide-react";
 import { allProjects, featuredProjects, Project } from "@/data/projectsData";
+import { formatDriveImageUrl } from "@/lib/imageUtils";
 
 const GitHubIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <svg
@@ -120,13 +121,27 @@ export const SectionProjects: React.FC = () => {
 
         {/* Featured Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {filteredFeatured.map((project) => (
-            <div
-              key={project.id}
-              className="rounded-3xl bg-bg-base shadow-neu-flat-lg p-8 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
+          {filteredFeatured.map((project) => {
+            const formattedImage = formatDriveImageUrl(project.imageUrl);
+            return (
+              <div
+                key={project.id}
+                className="rounded-3xl bg-bg-base shadow-neu-flat-lg p-6 sm:p-8 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 overflow-hidden"
+              >
+                <div>
+                  {formattedImage && (
+                    <div className="mb-6 rounded-2xl overflow-hidden shadow-neu-pressed-sm border border-black/5 bg-[#E2E8F0] aspect-video relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={formattedImage}
+                        alt={project.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between mb-4">
                   <span className="font-mono text-xs font-semibold text-text-muted">
                     {project.industry}
                   </span>
@@ -194,7 +209,8 @@ export const SectionProjects: React.FC = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Additional Projects Compact Grid */}
