@@ -15,6 +15,7 @@ import {
   Trash2,
   RefreshCw,
   ExternalLink,
+  Download,
 } from "lucide-react";
 
 type ActiveTab = "services" | "solutions" | "projects" | "settings";
@@ -33,9 +34,22 @@ export default function AdminPage() {
   const [solutions, setSolutions] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
 
-  // Load saved credentials on start
+  // Load saved credentials on start & Register Service Worker
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch((err) => {
+        console.warn("SW registration skipped:", err);
+      });
+    }
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
     const savedUrl = localStorage.getItem("gs_supabase_url") || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
     const savedKey = localStorage.getItem("gs_supabase_key") || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
     setSupabaseUrl(savedUrl);
@@ -43,7 +57,20 @@ export default function AdminPage() {
     if (savedUrl && savedKey) {
       fetchData(savedUrl, savedKey);
     }
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
   }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === "accepted") {
+      setInstallPrompt(null);
+    }
+  };
 
   const getClient = (url = supabaseUrl, key = supabaseKey) => {
     if (!url || !key) return null;
@@ -140,14 +167,27 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <button
-          onClick={() => fetchData()}
-          disabled={loading}
-          className="p-2 rounded-xl bg-[#E9EDF2] shadow-[3px_3px_6px_rgba(163,177,198,0.4),-3px_-3px_6px_rgba(255,255,255,0.8)] active:shadow-[inset_2px_2px_4px_rgba(163,177,198,0.4)] text-blue-600 transition-all"
-          title="Refresh Data"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-        </button>
+        <div className="flex items-center gap-2">
+          {installPrompt && (
+            <button
+              onClick={handleInstallClick}
+              className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all animate-pulse"
+              title="Install App"
+            >
+              <Download className="h-3.5 w-3.5" />
+              <span>Install App</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => fetchData()}
+            disabled={loading}
+            className="p-2 rounded-xl bg-[#E9EDF2] shadow-[3px_3px_6px_rgba(163,177,198,0.4),-3px_-3px_6px_rgba(255,255,255,0.8)] active:shadow-[inset_2px_2px_4px_rgba(163,177,198,0.4)] text-blue-600 transition-all"
+            title="Refresh Data"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          </button>
+        </div>
       </header>
 
       {/* Status banner */}

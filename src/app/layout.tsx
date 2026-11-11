@@ -62,6 +62,12 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "GS Admin",
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },

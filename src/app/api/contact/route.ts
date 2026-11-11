@@ -3,6 +3,7 @@ import { z } from "zod";
 import fs from "fs";
 import path from "path";
 import { Resend } from "resend";
+import { getSupabase } from "@/lib/supabase";
 
 // --- Zod schema ---
 const ContactSchema = z.object({
@@ -140,6 +141,28 @@ export async function POST(request: NextRequest) {
     writeContacts(contacts);
   } catch (err) {
     console.warn("Notice: File write skipped on serverless filesystem:", err);
+  }
+
+  // Supabase Lead Storage (if connected)
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      await supabase.from("contact_submissions").insert({
+        full_name: data.fullName,
+        business_name: data.businessName,
+        email: data.email,
+        phone: data.phone ?? null,
+        country: data.country ?? null,
+        industry: data.industry,
+        services: data.services ?? [data.service],
+        budget_range: data.budgetRange ?? null,
+        preferred_contact: data.preferredContact ?? null,
+        description: data.description,
+        status: "new",
+      });
+    } catch (dbErr) {
+      console.warn("Notice: Supabase lead insert skipped/failed:", dbErr);
+    }
   }
 
   // Send email notification via Resend if API key is provided
