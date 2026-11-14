@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { ArrowRight, Monitor, LayoutDashboard, Cpu, BarChart3, TrendingUp, Server } from "lucide-react";
-import { serviceDivisions } from "@/data/servicesData";
+import { serviceDivisions as fallbackDivisions } from "@/data/servicesData";
+import { useLiveContent } from "@/hooks/useLiveContent";
 
 const iconMap: Record<string, React.ReactNode> = {
   monitor: <Monitor className="h-6 w-6 text-brand-accent" />,
@@ -37,6 +38,8 @@ const cardVariants: Variants = {
 };
 
 export const SectionCapabilities: React.FC = () => {
+  const { services: liveServices } = useLiveContent();
+  const serviceDivisions = liveServices && liveServices.length > 0 ? liveServices : fallbackDivisions;
   return (
     <section id="capabilities" className="py-20 md:py-28 bg-bg-base relative overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

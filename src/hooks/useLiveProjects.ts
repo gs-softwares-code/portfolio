@@ -6,21 +6,21 @@ import { createClient } from "@supabase/supabase-js";
 
 /**
  * Hook to retrieve live synchronized projects.
- * - Always ensures defaultProjects are safely available as the baseline so tiles NEVER vanish.
- * - Merges updates/additions from Supabase or local cache.
- * - Only excludes specific projects that the user explicitly deleted.
+ * - Listens for local storage and broadcast changes so edits in Admin reflect instantly on live website.
+ * - Merges updates/additions from Supabase or local cache over defaultProjects.
+ * - Excludes only explicitly deleted projects.
  */
 export function useLiveProjects() {
   const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const syncProjectsFromStorage = () => {
     try {
       const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
       const deletedIds: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
 
       const cached = localStorage.getItem("gs_cached_projects");
-      let baseList = defaultProjects;
+      let baseList = [...defaultProjects];
 
       if (cached) {
         const parsed = JSON.parse(cached);
@@ -44,7 +44,6 @@ export function useLiveProjects() {
         (p) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug)
       );
 
-      // If everything was somehow marked deleted by accident, restore defaultProjects
       if (activeProjects.length > 0) {
         setProjects(activeProjects);
       } else {
@@ -54,14 +53,35 @@ export function useLiveProjects() {
     } catch (e) {
       setProjects(defaultProjects);
     }
+  };
 
-    // Connect to live Supabase if credentials exist
+  useEffect(() => {
+    // 1. Initial sync
+    syncProjectsFromStorage();
+
+    // 2. Listen to storage events & custom dispatch events across tabs / window
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "gs_cached_projects" || e.key === "gs_deleted_project_ids") {
+        syncProjectsFromStorage();
+      }
+    };
+    const handleCustomSync = () => {
+      syncProjectsFromStorage();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("gs_projects_updated", handleCustomSync);
+
+    // 3. Connect to live Supabase if credentials exist
     const sUrl = localStorage.getItem("gs_supabase_url") || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const sKey = localStorage.getItem("gs_supabase_key") || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!sUrl || !sKey) {
       setLoading(false);
-      return;
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+        window.removeEventListener("gs_projects_updated", handleCustomSync);
+      };
     }
 
     const client = createClient(sUrl, sKey);
@@ -102,9 +122,15 @@ export function useLiveProjects() {
     };
 
     loadLive();
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("gs_projects_updated", handleCustomSync);
+    };
   }, []);
 
   return { projects, loading };
 }
+
 
 

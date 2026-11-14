@@ -187,14 +187,25 @@ export default function AdminPage() {
 
     // Local state immediate optimistic update
     if (table === "services") {
-      setServices((prev) => prev.map((item) => (item.id === id ? { ...item, ...payload } : item)));
+      setServices((prev) => {
+        const updated = prev.map((item) => (item.id === id ? { ...item, ...payload } : item));
+        localStorage.setItem("gs_cached_services", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_content_updated"));
+        return updated;
+      });
     } else if (table === "solutions") {
-      setSolutions((prev) => prev.map((item) => (item.id === id ? { ...item, ...payload } : item)));
+      setSolutions((prev) => {
+        const updated = prev.map((item) => (item.id === id ? { ...item, ...payload } : item));
+        localStorage.setItem("gs_cached_solutions", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_content_updated"));
+        return updated;
+      });
     } else if (table === "projects") {
       setProjects((prev) => {
         const updated = prev.map((item) => (item.id === id ? { ...item, ...payload } : item));
         // Persist to local cache so public website reflects it immediately
         localStorage.setItem("gs_cached_projects", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_projects_updated"));
         return updated;
       });
     }
@@ -249,7 +260,12 @@ export default function AdminPage() {
         whoNeedsThis: ["Growing Businesses", "Enterprises"],
         relatedIndustries: [],
       };
-      setServices((prev) => [...prev, newRecord]);
+      setServices((prev) => {
+        const updated = [...prev, newRecord];
+        localStorage.setItem("gs_cached_services", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_content_updated"));
+        return updated;
+      });
     } else if (addType === "solution") {
       table = "solutions";
       newRecord = {
@@ -269,7 +285,12 @@ export default function AdminPage() {
         recommendedDivisions: ["digital-presence", "applications"],
         implementationRoadmap: [{ phase: "Phase 1", title: "Architecture", description: "System design & requirements" }],
       };
-      setSolutions((prev) => [...prev, newRecord]);
+      setSolutions((prev) => {
+        const updated = [...prev, newRecord];
+        localStorage.setItem("gs_cached_solutions", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_content_updated"));
+        return updated;
+      });
     } else if (addType === "project") {
       table = "projects";
       newRecord = {
@@ -287,7 +308,12 @@ export default function AdminPage() {
         imageUrl: newItemImage || null,
         featured: true,
       };
-      setProjects((prev) => [...prev, newRecord]);
+      setProjects((prev) => {
+        const updated = [...prev, newRecord];
+        localStorage.setItem("gs_cached_projects", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_projects_updated"));
+        return updated;
+      });
     }
 
     // Add to pending ledger
@@ -344,6 +370,7 @@ export default function AdminPage() {
           }
         } catch (e) {}
         localStorage.setItem("gs_cached_projects", JSON.stringify(updated));
+        window.dispatchEvent(new Event("gs_projects_updated"));
         return updated;
       });
     }

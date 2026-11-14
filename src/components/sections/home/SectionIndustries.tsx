@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { ArrowRight, Utensils, Dumbbell, Sparkles, Briefcase, ShoppingBag, GraduationCap, Building2, Rocket } from "lucide-react";
-import { industrySolutions } from "@/data/industriesData";
+import { industrySolutions as fallbackSolutions } from "@/data/industriesData";
+import { useLiveContent } from "@/hooks/useLiveContent";
 
 const iconMap: Record<string, React.ReactNode> = {
   utensils: <Utensils className="h-6 w-6 text-[#F59E0B]" />,
@@ -39,6 +40,8 @@ const itemVariants: Variants = {
 };
 
 export const SectionIndustries: React.FC = () => {
+  const { solutions: liveSolutions } = useLiveContent();
+  const industrySolutions = liveSolutions && liveSolutions.length > 0 ? liveSolutions : fallbackSolutions;
   return (
     <section id="solutions" className="py-20 md:py-28 bg-bg-base relative overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
