@@ -11,6 +11,7 @@ export interface IndustrySolution {
   tagline: string;
   headline: string;
   description: string;
+  galleryImages?: { url: string; alt: string; caption?: string }[];
   problems: string[];
   solutions: {
     name: string;
@@ -40,6 +41,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Systems for Cafes, Restaurants & Hotels",
     description:
       "The hospitality industry runs on speed, experience, and repeat customers. We build the digital infrastructure that helps hospitality businesses serve customers faster, reduce operational friction, and understand what's working.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+        alt: "Modern Cafe & Restaurant Dining Ambiance",
+        caption: "Dining & POS System",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+        alt: "Live Commercial Kitchen Operations",
+        caption: "Kitchen Kanban Flow",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+        alt: "Restaurant Table Reservation Setup",
+        caption: "Direct Table Booking",
+      },
+    ],
     problems: [
       "No professional digital presence to attract new customers",
       "Paper-based order systems slowing down kitchen operations",
@@ -134,6 +152,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Systems for Gyms, Studios & Fitness Businesses",
     description:
       "Fitness businesses grow on member satisfaction and retention. We engineer platforms that help gym owners manage memberships, reduce manual work, and keep members engaged — from inquiry to renewal.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80",
+        alt: "Modern Gym Training Floor & Equipment",
+        caption: "Facility & Weight Zone",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=800&q=80",
+        alt: "Strength Training & Coach Guidance",
+        caption: "Trainer & Member Plans",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=800&q=80",
+        alt: "Fitness Studio Cardio & Conditioning",
+        caption: "Renewal & Retention Telemetry",
+      },
+    ],
     problems: [
       "Membership records kept in notebooks or basic spreadsheets",
       "No way for prospects to explore membership options or enquire online",
@@ -221,6 +256,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Solutions for Salons, Spas & Wellness Businesses",
     description:
       "Beauty and wellness businesses depend on appointment management, customer experience, and repeat bookings. We build the digital systems that make running a salon or spa simpler, more professional, and more profitable.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+        alt: "Luxury Salon & Spa Interior Styling",
+        caption: "Salon Interior & Styling",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
+        alt: "Cosmetics & Skincare Treatment Station",
+        caption: "Treatment & Care Stations",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=80",
+        alt: "Spa Wellness Aromatherapy Lounge",
+        caption: "Online Booking Calendar",
+      },
+    ],
     problems: [
       "Appointment scheduling done manually by phone or WhatsApp",
       "No-shows with no prior reminder system in place",
@@ -307,6 +359,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Solutions for Lawyers, Consultants & Service Firms",
     description:
       "Professional service firms win business on credibility and trust. We build the digital infrastructure that communicates expertise, manages client inquiries, and supports efficient service delivery.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+        alt: "Corporate Office Conference & Strategy Room",
+        caption: "Firm Authority & Portal",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
+        alt: "Legal & Consulting Case Documentation",
+        caption: "Intake & Matter Tracking",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+        alt: "Executive Business Discussion & Advisory",
+        caption: "Document & Invoice Vault",
+      },
+    ],
     problems: [
       "Website doesn't accurately reflect the firm's expertise or credibility",
       "Inquiry management happens through email chains with no structure",
@@ -399,6 +468,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Commerce Infrastructure for Retailers & Online Sellers",
     description:
       "Retail businesses need digital systems that drive sales, control inventory, and understand customer behavior. We engineer commerce platforms — from online stores to inventory management — that keep operations running and revenue growing.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
+        alt: "Retail Boutique Display & Commerce Setup",
+        caption: "Storefront & Retail Floor",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80",
+        alt: "POS Checkout & Card Payment Terminal",
+        caption: "POS & Billing Checkout",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
+        alt: "Retail Stock Warehouse & Fulfillment",
+        caption: "Inventory & Dispatch Hub",
+      },
+    ],
     problems: [
       "No online presence — missing customers who search before they shop",
       "Inventory tracked manually in notebooks or basic spreadsheets",
@@ -486,6 +572,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Solutions for Coaching Institutes, Schools & Academies",
     description:
       "Educational institutions operate complex systems — admissions, attendance, fees, communication, and performance tracking. We build the digital platforms that make running an educational institution more efficient and professional.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+        alt: "Modern Education Campus & Students Learning",
+        caption: "Academy Campus & Classes",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+        alt: "Classroom Lecture & Digital Learning Board",
+        caption: "Student & Batch Management",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+        alt: "Academic Exam Assessment & Results",
+        caption: "Fee & Exam Performance Vault",
+      },
+    ],
     problems: [
       "Admission inquiries handled informally with no tracking system",
       "Student attendance and records managed in paper registers",
@@ -573,6 +676,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Solutions for Property Agents, Developers & Brokers",
     description:
       "Real estate businesses live and die by their lead management. We build digital platforms that showcase properties professionally, capture and manage leads systematically, and convert inquiries into transactions.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
+        alt: "Luxury Architecture & Real Estate Development",
+        caption: "Property Portfolio & Listings",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        alt: "Modern Villa & Residence Showcase",
+        caption: "Virtual Walkthrough Showcase",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80",
+        alt: "Commercial Real Estate & Office Towers",
+        caption: "Broker Lead Pipeline & CRM",
+      },
+    ],
     problems: [
       "Property listings managed in spreadsheets with no customer-facing catalogue",
       "Leads arriving through multiple channels with no central tracking",
@@ -659,6 +779,23 @@ export const industrySolutions: IndustrySolution[] = [
     headline: "Digital Infrastructure for Growing Small & Medium Businesses",
     description:
       "Every growing business reaches a point where manual systems create bottlenecks. We engineer the digital infrastructure — systems, automation, and analytics — that helps small and medium businesses operate at a larger scale without proportional increases in overhead.",
+    galleryImages: [
+      {
+        url: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+        alt: "Tech Startup Team Collaboration & Scale",
+        caption: "Cross-Functional Collaboration",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+        alt: "Business Growth Analytics Dashboard",
+        caption: "Real-Time BI & Metrics",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
+        alt: "Software Engineering & Infrastructure Setup",
+        caption: "Custom Internal Automation",
+      },
+    ],
     problems: [
       "Operations managed across too many disconnected tools and spreadsheets",
       "Growth limited by manual processes that can't scale with the business",

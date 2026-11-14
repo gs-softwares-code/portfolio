@@ -5,6 +5,12 @@ import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { engagementModels } from "@/data/engagementData";
+import {
+  ModularServicesGraphic,
+  IntegratedSolutionsGraphic,
+  CustomSoftwareGraphic,
+  OngoingSupportGraphic,
+} from "./EngagementTileGraphics";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,10 +35,34 @@ const itemVariants: Variants = {
 
 export const SectionEngagement: React.FC = () => {
   return (
-    <section id="engagement" className="py-20 md:py-28 bg-bg-dark text-white relative overflow-hidden">
+    <section id="engagement" className="py-24 md:py-32 bg-bg-dark text-white relative overflow-hidden">
+      {/* Fog-like multi-stop organic atmospheric gradient transition (Light #E9EDF2 -> Dark #171C29) */}
+      <div
+        className="absolute top-0 inset-x-0 h-44 sm:h-52 md:h-64 pointer-events-none z-20"
+        style={{
+          background: `linear-gradient(to bottom,
+            #E9EDF2 0%,
+            rgba(233, 237, 242, 0.95) 12%,
+            rgba(200, 208, 222, 0.8) 28%,
+            rgba(135, 148, 175, 0.6) 45%,
+            rgba(80, 94, 125, 0.45) 60%,
+            rgba(45, 54, 76, 0.35) 74%,
+            rgba(27, 33, 49, 0.2) 86%,
+            rgba(23, 28, 41, 0) 100%
+          )`,
+        }}
+      />
+      {/* Soft atmospheric fog haze layer */}
+      <div
+        className="absolute top-0 inset-x-0 h-48 sm:h-56 md:h-72 pointer-events-none z-10"
+        style={{
+          background: `radial-gradient(ellipse 90% 60% at 50% 0%, rgba(233, 237, 242, 0.85) 0%, rgba(200, 210, 228, 0.35) 45%, rgba(23, 28, 41, 0) 80%)`,
+        }}
+      />
+
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-3xl h-96 bg-brand-accent/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 pt-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -66,20 +96,26 @@ export const SectionEngagement: React.FC = () => {
                 key={model.id}
                 variants={itemVariants}
                 whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                className={`rounded-3xl bg-bg-dark p-6 flex flex-col justify-between transition-all duration-300 relative border ${
+                className={`rounded-3xl bg-bg-dark p-6 flex flex-col justify-between transition-all duration-300 relative border group ${
                   isFeatured
                     ? "border-brand-accent shadow-neu-accent"
-                    : "border-white/5 shadow-neu-dark-flat"
+                    : "border-white/5 hover:border-brand-accent/40 shadow-neu-dark-flat hover:shadow-neu-dark-pressed"
                 }`}
               >
                 {isFeatured && (
-                  <span className="absolute -top-3 right-6 bg-brand-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                  <span className="absolute -top-3 right-6 bg-brand-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md z-20">
                     Most Popular
                   </span>
                 )}
 
                 <div>
-                  <h3 className="font-heading text-xl font-bold text-white mb-1">
+                  {/* Service Specific Animated Element */}
+                  {model.id === "individual-services" && <ModularServicesGraphic />}
+                  {model.id === "integrated-solutions" && <IntegratedSolutionsGraphic />}
+                  {model.id === "custom-development" && <CustomSoftwareGraphic />}
+                  {model.id === "ongoing-support" && <OngoingSupportGraphic />}
+
+                  <h3 className="font-heading text-xl font-bold text-white mb-1 group-hover:text-brand-accent transition-colors duration-200">
                     {model.title}
                   </h3>
                   <p className="font-body text-xs text-brand-accent font-semibold mb-4">
@@ -111,7 +147,7 @@ export const SectionEngagement: React.FC = () => {
                   }`}
                 >
                   <span>{model.cta}</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </motion.div>
             );
