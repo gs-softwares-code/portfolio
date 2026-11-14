@@ -6,56 +6,56 @@ import { createClient } from "@supabase/supabase-js";
 
 /**
  * Hook to retrieve live synchronized projects.
- * Follows the Offline-First SOP protocol:
- * 1. Checks localStorage for custom Supabase credentials configured via the PWA / Admin console.
- * 2. Respects deletion tombstones ('gs_deleted_project_ids') so deleted projects are NEVER resurrected by defaults.
- * 3. Uses 'gs_cached_projects' directly when available.
- * 4. Synchronizes with Supabase live table if credentials exist.
+ * - Always ensures defaultProjects are safely available as the baseline so tiles NEVER vanish.
+ * - Merges updates/additions from Supabase or local cache.
+ * - Only excludes specific projects that the user explicitly deleted.
  */
 export function useLiveProjects() {
-  const [projects, setProjects] = useState<Project[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
-        const deletedIds: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
-        const cached = localStorage.getItem("gs_cached_projects");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed)) {
-            return parsed.filter((p: any) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug));
-          }
-        }
-        return defaultProjects.filter((p) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug));
-      } catch (e) {
-        return defaultProjects;
-      }
-    }
-    return defaultProjects;
-  });
-
+  const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
-    const deletedIds: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
+    try {
+      const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
+      const deletedIds: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
 
-    // 1. Immediately check for any local cached projects from PWA publish or deletion
-    const cachedProjects = localStorage.getItem("gs_cached_projects");
-    if (cachedProjects) {
-      try {
-        const parsed = JSON.parse(cachedProjects);
-        if (Array.isArray(parsed)) {
-          const filtered = parsed.filter((p: any) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug));
-          setProjects(filtered);
+      const cached = localStorage.getItem("gs_cached_projects");
+      let baseList = defaultProjects;
+
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge cached items over defaultProjects
+          baseList = defaultProjects.map((dp) => {
+            const found = parsed.find((item: any) => item.id === dp.id || item.slug === dp.slug);
+            return found ? { ...dp, ...found } : dp;
+          });
+          // Include any newly created custom projects
+          parsed.forEach((item: any) => {
+            if (!baseList.some((b) => b.id === item.id || b.slug === item.slug)) {
+              baseList.push(item);
+            }
+          });
         }
-      } catch (e) {
-        console.warn("Failed to parse local cached projects", e);
       }
-    } else if (deletedIds.length > 0) {
-      setProjects(defaultProjects.filter((p) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug)));
+
+      // Filter only explicitly deleted IDs
+      const activeProjects = baseList.filter(
+        (p) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug)
+      );
+
+      // If everything was somehow marked deleted by accident, restore defaultProjects
+      if (activeProjects.length > 0) {
+        setProjects(activeProjects);
+      } else {
+        localStorage.removeItem("gs_deleted_project_ids");
+        setProjects(defaultProjects);
+      }
+    } catch (e) {
+      setProjects(defaultProjects);
     }
 
-    // 2. Fetch live data from Supabase if configured
+    // Connect to live Supabase if credentials exist
     const sUrl = localStorage.getItem("gs_supabase_url") || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const sKey = localStorage.getItem("gs_supabase_key") || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -69,17 +69,33 @@ export function useLiveProjects() {
     const loadLive = async () => {
       try {
         const { data, error } = await client.from("projects").select("*");
-        if (!error && data) {
-          // Filter out any tombstone deleted projects
-          const activeLive = data.filter(
-            (item: any) => !deletedIds.includes(item.id) && !deletedIds.includes(item.slug)
+        if (!error && data && data.length > 0) {
+          const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
+          const deletedIds: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
+
+          // Merge live data with default projects
+          const merged = defaultProjects.map((dp) => {
+            const found = data.find((item: any) => item.id === dp.id || item.slug === dp.slug);
+            return found ? { ...dp, ...found } : dp;
+          });
+
+          data.forEach((item: any) => {
+            if (!merged.some((m) => m.id === item.id || m.slug === item.slug)) {
+              merged.push(item as Project);
+            }
+          });
+
+          const activeLive = merged.filter(
+            (p) => !deletedIds.includes(p.id) && !deletedIds.includes(p.slug)
           );
 
-          localStorage.setItem("gs_cached_projects", JSON.stringify(activeLive));
-          setProjects(activeLive as Project[]);
+          if (activeLive.length > 0) {
+            localStorage.setItem("gs_cached_projects", JSON.stringify(activeLive));
+            setProjects(activeLive);
+          }
         }
       } catch (err) {
-        console.warn("Failed to fetch live projects from Supabase:", err);
+        console.warn("Supabase projects sync warning:", err);
       } finally {
         setLoading(false);
       }
@@ -90,4 +106,5 @@ export function useLiveProjects() {
 
   return { projects, loading };
 }
+
 
