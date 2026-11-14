@@ -332,7 +332,20 @@ export default function AdminPage() {
     } else if (table === "solutions") {
       setSolutions((prev) => prev.filter((i) => i.id !== id));
     } else if (table === "projects") {
-      setProjects((prev) => prev.filter((i) => i.id !== id));
+      setProjects((prev) => {
+        const updated = prev.filter((i) => i.id !== id);
+        // Track tombstone deletions so default fallback doesn't re-insert it
+        try {
+          const rawDeleted = localStorage.getItem("gs_deleted_project_ids");
+          const deletedList: string[] = rawDeleted ? JSON.parse(rawDeleted) : [];
+          if (!deletedList.includes(id)) {
+            deletedList.push(id);
+            localStorage.setItem("gs_deleted_project_ids", JSON.stringify(deletedList));
+          }
+        } catch (e) {}
+        localStorage.setItem("gs_cached_projects", JSON.stringify(updated));
+        return updated;
+      });
     }
 
     const client = getClient();
