@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/admin/*"],
     },
-    sitemap: "https://gs-softwares.com/sitemap.xml",
+    sitemap: "https://gs-softwares-official.vercel.app/sitemap.xml",
   };
 }
 

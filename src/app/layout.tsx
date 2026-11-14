@@ -51,6 +51,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
+    other: {
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || "",
+    },
+  },
   twitter: {
     card: "summary_large_image",
     title: "GS-Softwares | Hybrid Digital Solutions & AI Engineering",
