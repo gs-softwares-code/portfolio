@@ -40,6 +40,8 @@ export const featuredProjects: Project[] = [
       "Embedded Google Maps & verified directions",
     ],
     githubUrl: "https://github.com/Gulshan-Singh-gs/off_the_grid-gym",
+    liveUrl: "https://off-the-grid-gym.pages.dev/",
+    imageUrl: "https://drive.google.com/file/d/1YqK-I2ABKBHjoQOP1Eq-UXsJG8_EgaJT/view?usp=sharing",
     featured: true,
   },
   {

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ExternalLink, CheckCircle2 } from "lucide-react";
 import { allProjects, featuredProjects, Project } from "@/data/projectsData";
+import { useLiveProjects } from "@/hooks/useLiveProjects";
 import { formatDriveImageUrl } from "@/lib/imageUtils";
 
 const GitHubIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
@@ -33,6 +34,7 @@ const filterCategories = [
 
 export const SectionProjects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { projects: liveProjects } = useLiveProjects();
 
   const filterProject = (project: Project) => {
     if (activeFilter === "All") return true;
@@ -69,8 +71,8 @@ export const SectionProjects: React.FC = () => {
     return true;
   };
 
-  const filteredFeatured = featuredProjects.filter(filterProject);
-  const filteredAdditional = allProjects
+  const filteredFeatured = liveProjects.filter((p) => p.featured).filter(filterProject);
+  const filteredAdditional = liveProjects
     .filter((p) => !p.featured)
     .filter(filterProject);
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { allProjects, featuredProjects, Project } from "@/data/projectsData";
+import { useLiveProjects } from "@/hooks/useLiveProjects";
 import { formatDriveImageUrl } from "@/lib/imageUtils";
 import { ExternalLink, CheckCircle2 } from "lucide-react";
 
@@ -35,6 +36,7 @@ const filterCategories = [
 
 export default function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { projects: liveProjects } = useLiveProjects();
 
   const filterProject = (project: Project) => {
     if (activeFilter === "All") return true;
@@ -71,7 +73,7 @@ export default function PortfolioPage() {
     return true;
   };
 
-  const filteredProjects = allProjects.filter(filterProject);
+  const filteredProjects = liveProjects.filter(filterProject);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

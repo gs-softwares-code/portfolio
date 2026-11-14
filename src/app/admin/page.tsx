@@ -191,7 +191,12 @@ export default function AdminPage() {
     } else if (table === "solutions") {
       setSolutions((prev) => prev.map((item) => (item.id === id ? { ...item, ...payload } : item)));
     } else if (table === "projects") {
-      setProjects((prev) => prev.map((item) => (item.id === id ? { ...item, ...payload } : item)));
+      setProjects((prev) => {
+        const updated = prev.map((item) => (item.id === id ? { ...item, ...payload } : item));
+        // Persist to local cache so public website reflects it immediately
+        localStorage.setItem("gs_cached_projects", JSON.stringify(updated));
+        return updated;
+      });
     }
 
     const client = getClient();
@@ -1071,7 +1076,27 @@ export default function AdminPage() {
 
             <div className="flex gap-2 pt-2">
               <button
-                onClick={() => {
+                onClick={async () => {
+                  const client = getClient();
+                  if (client) {
+                    setLoading(true);
+                    try {
+                      // Upsert all current projects, services, solutions to Supabase
+                      await Promise.all([
+                        client.from("services").upsert(services),
+                        client.from("solutions").upsert(solutions),
+                        client.from("projects").upsert(projects),
+                      ]);
+                      localStorage.setItem("gs_cached_projects", JSON.stringify(projects));
+                    } catch (e: any) {
+                      console.warn("Supabase batch sync notice:", e.message);
+                    } finally {
+                      setLoading(false);
+                    }
+                  } else {
+                    localStorage.setItem("gs_cached_projects", JSON.stringify(projects));
+                  }
+
                   setPendingLedger([]);
                   const nowStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
                   setLastPublishedAt(nowStr);
